@@ -1,0 +1,92 @@
+# necesarry libraries and function
+source( "/Path/To/StrandVisualizationFunction.R" )
+
+# Path of my BAMs
+BAM1 = "/Path/To/BAM1"
+BAM2 = "/Path/To/BAM2"
+BAM3 = "/Path/To/BAM3"
+BAM4 = "/Path/To/BAM4"
+
+# Total reads of each sample for normalization
+TOTAL_READS = c(???,???,???,???)
+
+# 
+GTRACK <- GenomeAxisTrack()
+
+# 
+UCSC_GENES <- UcscTrack(
+    genome="hg38"
+    ,table="refGene"
+    ,track = 'NCBI RefSeq'
+    ,trackType="GeneRegionTrack"
+    ,chromosome="chr1"
+    ,rstarts = "exonStarts"
+    ,rends = "exonEnds"
+    ,gene = "name"
+    ,symbol = 'name'
+    ,transcript = "name"
+    ,strand = "strand"
+    ,stacking = 'pack'
+    ,showID = T
+    ,geneSymbol = T
+)
+
+#
+BAM1_TRACK = DataTrack(
+	BAM1
+    ,genome="hg38"
+	,chromosome="chr1"
+	,importFunction=strandedBamImport
+	,stream=TRUE
+	,legend=FALSE
+	,col=c("cornflowerblue","purple")
+	,groups=c("Forward","Reverse")
+    ,transformation=function(x) 10e6 * x / TOTAL_READS[1])
+  
+BAM2_TRACK = DataTrack(
+	BAM2
+    ,genome="hg38"
+	,chromosome="chr1"
+	,importFunction=strandedBamImport
+	,stream=TRUE
+	,legend=FALSE
+	,col=c("cornflowerblue","purple")
+	,groups=c("Forward","Reverse")
+    ,transformation=function(x) 10e6 * x / TOTAL_READS[2])
+
+BAM3_TRACK = DataTrack(
+	BAM3
+    ,genome="hg38"
+	,chromosome="chr1"
+	,importFunction=strandedBamImport
+	,stream=TRUE
+	,legend=FALSE
+	,col=c("cornflowerblue","purple")
+	,groups=c("Forward","Reverse")
+    ,transformation=function(x) 10e6 * x / TOTAL_READS[3])
+
+BAM4_TRACK = DataTrack(
+	BAM4
+    ,genome="hg38"
+	,chromosome="chr1"
+	,importFunction=strandedBamImport
+	,stream=TRUE
+	,legend=FALSE
+	,col=c("cornflowerblue","purple")
+	,groups=c("Forward","Reverse")
+    ,transformation=function(x) 10e6 * x / TOTAL_READS[4])
+
+# plot for NOTCH2NLC
+plotTracks(
+	list(GTRACK, BAM1_TRACK, BAM2_TRACK, BAM3_TRACK, BAM4_TRACK, UCSC_GENES)
+	,from=146228309
+    ,to=146235032
+	,ylim=c(-35,3)
+    ,type="hist"
+	,col.histogram=NA
+	,cex.title=1
+	,cex.axis=1
+	,title.width=1.2)
+
+ 
+  
